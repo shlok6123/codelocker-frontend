@@ -1,0 +1,19 @@
+
+.snippet-form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 2rem auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  .snippet-form input,
+  .snippet-form textarea {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  .snippet-form textarea {
+    min-height: 150px;
+  }
