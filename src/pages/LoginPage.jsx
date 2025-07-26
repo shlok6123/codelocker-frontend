@@ -7,10 +7,33 @@ function LoginPage({ onLogin }) {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onLogin(username, password); // Call the function from App.jsx
-    navigate('/'); // Redirect to the home page after login
+    
+    // Create the Basic Auth header
+    const headers = new Headers();
+    const credentials = btoa(`${username}:${password}`);
+    headers.append('Authorization', 'Basic ' + credentials);
+
+    try {
+      // Send a request to the protected "/me" endpoint to check credentials
+      const response = await fetch('http://localhost:8080/api/auth/me', {
+        method: 'GET',
+        headers: headers,
+      });
+
+      if (response.ok) {
+        // If the response is 200 OK, credentials are valid
+        onLogin(username, password);
+        navigate('/'); // Redirect to home
+      } else {
+        // If response is 401, credentials are bad
+        alert("Invalid username or password.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred during login.");
+    }
   };
 
   return (

@@ -1,8 +1,15 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 
-function Header() {
+function Header({ currentUser, onLogout }) {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    onLogout();
+    navigate('/login');
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -11,8 +18,22 @@ function Header() {
             CodeLocker
           </Link>
         </Typography>
-        <Button color="inherit" component={Link} to="/login">Login</Button>
-        <Button color="inherit" component={Link} to="/register">Register</Button>
+
+        {currentUser ? (
+          // If user is logged in, show this:
+          <Box>
+            <Typography component="span" sx={{ mr: 2 }}>
+              Welcome, {currentUser.username}
+            </Typography>
+            <Button color="inherit" onClick={handleLogoutClick}>Logout</Button>
+          </Box>
+        ) : (
+          // If user is not logged in, show this:
+          <Box>
+            <Button color="inherit" component={Link} to="/login">Login</Button>
+            <Button color="inherit" component={Link} to="/register">Register</Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
